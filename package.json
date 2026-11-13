@@ -1,7 +1,7 @@
 {
   "name": "sektor9",
-  "version": "0.4.0",
-  "description": "SEKTOR 9 browser FPS \u2014 Lobby / Visual Overhaul",
+  "version": "0.5.0",
+  "description": "SEKTOR 9 browser FPS — Cinematic Settings Update",
   "main": "server.js",
   "type": "module",
   "scripts": {

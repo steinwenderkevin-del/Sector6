@@ -14,7 +14,7 @@ const server=http.createServer(async(req,res)=>{
   const url=new URL(req.url,'http://localhost');
   if(!['GET','HEAD'].includes(req.method)){res.writeHead(405);return res.end();}
   if(url.pathname==='/health'||url.pathname==='/lan-info'){
-   const body=JSON.stringify(url.pathname==='/health'?{ok:true,version:'0.4'}:{addresses:lanAddresses()});
+   const body=JSON.stringify(url.pathname==='/health'?{ok:true,version:'0.5'}:{addresses:lanAddresses()});
    res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'});return res.end(req.method==='HEAD'?undefined:body);
   }
   if(!['/','/index.html'].includes(url.pathname)){res.writeHead(404);return res.end('Not found');}
@@ -40,7 +40,7 @@ wss.on('connection',(ws,req)=>{
     if(m.create){if(rooms.size>=20)throw Error('Server voll.');do{code=randomBytes(3).toString('hex').toUpperCase();}while(rooms.has(code));candidate=createLobby(code);}
     else {candidate=rooms.get(code);if(!candidate)throw Error('Raum nicht gefunden. Code prüfen.');}
     p=joinLobby(candidate,ws,randomBytes(8).toString('hex'),m.name,m.weapon);room=candidate;rooms.set(code,room);clearTimeout(joinTimeout);
-    send(ws,{type:'joined',id:p.id,room:code,phase:'waiting',protocol:4});announce(room);
+    send(ws,{type:'joined',id:p.id,room:code,phase:'waiting',protocol:5});announce(room);
    }else if(m.type==='start'&&p){
     startLobby(room,p.id);broadcast(room,{type:'started',room:room.code,state:snapshot(room.game)});
    }else if(m.type==='input'&&p&&room.phase==='playing'){
@@ -52,4 +52,4 @@ wss.on('connection',(ws,req)=>{
 });
 let frame=0;setInterval(()=>{for(const r of rooms.values()){if(r.phase!=='playing')continue;for(const p of r.game.players)if(Date.now()-(p.lastInput||0)>400)p.input={};tick(r.game,1/30);if(frame%2===0)broadcast(r,{type:'state',state:snapshot(r.game)});}frame++;},1000/30);
 setInterval(()=>{for(const ws of wss.clients){if(!ws.alive){ws.terminate();continue;}ws.alive=false;ws.ping();}},30000).unref();
-server.listen(port,'0.0.0.0',()=>{console.log('SEKTOR 9 v0.4 — http://localhost:'+port);for(const a of lanAddresses())console.log('LAN: '+a);});
+server.listen(port,'0.0.0.0',()=>{console.log('SEKTOR 9 v0.5 — http://localhost:'+port);for(const a of lanAddresses())console.log('LAN: '+a);});
