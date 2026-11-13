@@ -1,23 +1,16 @@
 {
   "name": "sektor9",
-  "version": "0.1.0",
-  "description": "Original browser FPS prototype with authoritative multiplayer",
+  "version": "0.3.0",
+  "description": "SEKTOR 9 browser FPS \u2014 Combat Update",
   "main": "server.js",
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
-  },
+  "type": "module",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
     "test": "node --test tests/*.test.js"
   },
-  "keywords": [],
-  "author": "",
   "license": "MIT",
-  "type": "module",
   "dependencies": {
-    "three": "^0.187.0",
-    "ws": "^8.23.0"
+    "ws": "8.23.0"
   }
 }
